@@ -1,6 +1,7 @@
 package Dungeon;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class NormalRoom extends Room{
 	
@@ -8,14 +9,17 @@ public class NormalRoom extends Room{
 
 	public NormalRoom(String name) {
 		super(name);
-		this.commandList = new ArrayList<>();
-		this.commandList.add("cross ");
+		this.commandList = new HashSet<>();
+		this.commandList.add("exit");
 		this.commandList.add("precedent");
-		this.commandList.add("description");
-		
-	
 	}
 
+	@Override
+	protected void test(String command) {
+		
+		
+	}
+	
 	
 	
 

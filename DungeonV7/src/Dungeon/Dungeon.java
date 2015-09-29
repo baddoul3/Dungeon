@@ -12,14 +12,14 @@ public class Dungeon {
 	protected int indexPrecedentRoom;
 	protected boolean gameIsFinished = false;
 	protected List<Room> crossedRooms = new ArrayList<>();
-	protected Gamer gamer;
+	protected Player gamer;
 	protected final Scanner scanner = new Scanner(System.in);
 
 	public Dungeon() {
 
 	}
 
-	public Dungeon(Gamer gamer) {
+	public Dungeon(Player gamer) {
 		this.gamer = gamer;
 	}
 
@@ -40,9 +40,9 @@ public class Dungeon {
 	public Room getRandomRoom() {
 		List<Room> roomListes = new ArrayList();
 		roomListes.add(new NormalRoom("normal"));
-		roomListes.add(new NormalRoom("monster"));
-		roomListes.add(new NormalRoom("key"));
-		roomListes.add(new NormalRoom("button"));
+		roomListes.add(new MonsterRoom("monster"));
+		roomListes.add(new KeyRoom("key"));
+		roomListes.add(new ButtonRoom("button"));
 
 		int randomRoom = new Random().nextInt(4);
 		return roomListes.get(randomRoom);
@@ -54,15 +54,20 @@ public class Dungeon {
 	* the "cross" command or the precedent command. The others command are process 
 	* in the rooms clacess using polymorphism. 	
 	*/
+	
 	public void start() {
+		
+		// create a new random current room and put it in the crossed rooms table
 		currentRoom = getRandomRoom();
 		crossedRooms.add(currentRoom);
 
 		indexCurentRoom = crossedRooms.indexOf(currentRoom);
-		System.out.println("l'index current room :" + indexCurentRoom);
-		System.out.println("name current room: " + currentRoom.name);
+		
 
 		do {
+			if(!this.currentRoom.name.equals("button"))
+			System.out.println("you are in room :"+currentRoom.name);
+			
 			System.out.println("This is the commands choice:");
 			for (String commands : currentRoom.commandList) {
 				System.out.println(commands);
@@ -73,6 +78,7 @@ public class Dungeon {
 			// Read a command from the user (stdin)
 			String line = scanner.nextLine();
 			currentRoom.interpretCommands(line);
+			
 
 			if (currentRoom.crossCommand) {
 				if (crossedRooms.size() > indexCurentRoom) {

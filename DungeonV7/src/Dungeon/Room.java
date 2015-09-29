@@ -1,33 +1,32 @@
 package Dungeon;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public abstract class Room {
 	protected String name;
-	//protected Room precedentRoom;
-	protected List<String> commandList;
-	protected boolean crossCommand = false; 
+	// protected Room precedentRoom;
+	protected Set<String> commandList;
+	protected boolean crossCommand = false;
 	protected boolean precedentCommand = false;
-
-	
 
 	public Room(String name) {
 		this.name = name;
-		
-		
+
 	}
 
-	public void interpretCommands(String command)
-	{
-		if(command.equals("cross"))
-			this.crossCommand = true; 
-		else if(command.equals("precedent"))
+	protected abstract void test(String chaine);
+
+	public void interpretCommands(String command) {
+		test(command);
+		if (command.equals("exit"))
+			this.crossCommand = true;
+		else if (command.equals("precedent"))
 			this.precedentCommand = true;
-		else if(command.equals("description"))
-			System.out.println("you are in room :"+this.name);
-		else 
+		else if (commandList.contains(command))
 			System.out.println("wrong command, tray again!!");
-		
+
 	}
 
 }

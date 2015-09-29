@@ -1,20 +1,31 @@
 package Dungeon;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 public class KeyRoom extends Room{
 	
 	
 	public KeyRoom(String name) {
 		super(name);
-		
-		this.commandList.add("open");
-		this.commandList.add("cross");
-		this.commandList.add("precedent");	
-	}
-
-	@Override
-	public void interpretCommands(String command) {
-		// TODO Auto-generated method stub
+		this.commandList = new HashSet<>();
+		this.commandList.add("open");		
+		this.commandList.add("precedent");
 		
 	}
 
+	
+	public void test(String command) {
+				
+
+		
+		if(command.equals("open")){
+			
+			this.commandList.add("exit");
+			this.commandList.remove("open");
+			
+			
+		}
+		
+		}
 }

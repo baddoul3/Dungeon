@@ -1,12 +1,12 @@
 package Dungeon;
 
-public class Gamer {
+public class Player {
 
 	int keys;
 	int blows;
 	int potion;
 	
-	public Gamer(int k, int b, int p)
+	public Player(int k, int b, int p)
 	{
 		keys = k;
 		blows = b;
@@ -37,7 +37,7 @@ public class Gamer {
 		this.potion = potion;
 	}
 
-	public Gamer()
+	public Player()
 	{
 		
 	}
