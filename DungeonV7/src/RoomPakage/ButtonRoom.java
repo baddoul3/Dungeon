@@ -1,7 +1,9 @@
-package Dungeon;
+package RoomPakage;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import DungeonPakage.Room;
 
 public class ButtonRoom extends Room {
 
@@ -9,12 +11,17 @@ public class ButtonRoom extends Room {
 		super(name);
 		this.commandList = new HashSet<>();
 		this.commandList.add("description");
+		this.commandList.add("use potion");
 			
 	}
 
 	@Override
-	public void test(String command)
+	public void getSpecificInterpretation(String command)
 	{
+		/*
+		 * the only case when the description is not mentioned at the beginning
+		 * for the other sub classes this test is not necessary
+		 */	
 		if(command.equals("description")){
 			System.out.println(
 					"you have a button to press\n"+
@@ -29,6 +36,9 @@ public class ButtonRoom extends Room {
 				
 					
 		}
+		/*
+		 * Update the button class list to contain only exit and precedent choices at last
+		 */
 		else if(command.equals("button")){
 			this.commandList.remove("button");
 			this.commandList.remove("description");

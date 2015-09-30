@@ -1,84 +1,109 @@
-package Dungeon;
+package DungeonPakage;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Dungeon {
+import RoomPakage.ButtonRoom;
+import RoomPakage.KeyRoom;
+import RoomPakage.MonsterRoom;
+import RoomPakage.NormalRoom;
+import RoomPakage.TreasureRoom;
+
+public abstract class Dungeon {
+	protected String name;
 	protected Room currentRoom;
 	protected Room precedent;
 	protected int indexCurentRoom;
 	protected int indexPrecedentRoom;
 	protected boolean gameIsFinished = false;
 	protected List<Room> crossedRooms = new ArrayList<>();
-	protected Player gamer;
+	protected Player player;
+	protected int usedKeys;
+	protected int usedWeapons;
+	protected int treasure ;
+	protected boolean transition = false;
 	protected final Scanner scanner = new Scanner(System.in);
 
 	public Dungeon() {
 
 	}
 
-	public Dungeon(Player gamer) {
-		this.gamer = gamer;
+	public Dungeon(String name, Player player) {
+		this.player = player;
+		this.name = name;
 	}
 
 	public Room getCurrentRoom() {
 		return currentRoom;
 	}
 
-	/*
-	 * public void interpretCommand(String command) {
-	 * 
-	 * String go = command.substring(0, 2); if (go.equals("go")) { String
-	 * direction = command.substring(3);
-	 * if(currentRoom.interpretDirection(currentRoom, direction)!=null)
-	 * currentRoom=currentRoom.interpretDirection(currentRoom, direction); }
-	 * else System.out.println("please start your command by \"go\"?"); }
-	 */
-
 	public Room getRandomRoom() {
 		List<Room> roomListes = new ArrayList();
+		
+		
 		roomListes.add(new NormalRoom("normal"));
 		roomListes.add(new MonsterRoom("monster"));
 		roomListes.add(new KeyRoom("key"));
 		roomListes.add(new ButtonRoom("button"));
+		roomListes.add(new TreasureRoom("treasure"));
 
 		int randomRoom = new Random().nextInt(4);
 		return roomListes.get(randomRoom);
 
 	}
 
-	/* This method creates a random romm, which is a current room. Also it creates
-	* the precedent room. it use only two choices of the gamer: whene he chooses 
-	* the "cross" command or the precedent command. The others command are process 
-	* in the rooms clacess using polymorphism. 	
-	*/
-	
+	/*
+	 * This method creates a random room, which is a current room. Also it
+	 * creates the precedent room. it use only two choices of the player: when
+	 * he chooses the "cross" command or the precedent command.
+	 */
+
 	public void start() {
-		
-		// create a new random current room and put it in the crossed rooms table
+
 		currentRoom = getRandomRoom();
 		crossedRooms.add(currentRoom);
 
 		indexCurentRoom = crossedRooms.indexOf(currentRoom);
-		
+		System.out.println("the dungeon is: " + this.name);
+		usedKeys = this.player.keys;
+		usedWeapons = this.player.weapons;
 
 		do {
-			if(!this.currentRoom.name.equals("button"))
-			System.out.println("you are in room :"+currentRoom.name);
-			
+
+		
+			System.out.println("You have  : " + this.usedKeys + " keys");
+			System.out.println("You have  : " + this.usedWeapons + " weapons");
+			System.out.println("You have  : " + this.player.getTreasure() + " treasure");
+
+			if (!this.currentRoom.name.equals("button"))
+				System.out.println("you are in room :" + currentRoom.name);
+
 			System.out.println("This is the commands choice:");
+			System.out.println("=============================");
 			for (String commands : currentRoom.commandList) {
 				System.out.println(commands);
 			}
-
+			System.out.println("=============================");
 			System.out.println("What do you want to do?");
 			System.out.print("> ");
 			// Read a command from the user (stdin)
-			String line = scanner.nextLine();
+			String line = scanner.nextLine();			
+
 			currentRoom.interpretCommands(line);
+
+			if (line.equals("open"))				
+				usedKeys--;
 			
+			else if (line.equals("use weapon"))
+				usedWeapons--;
+			
+			else if (line.equals("get treasure"))
+				this.player.setTreasure(treasure+=100);
+			
+			else  if (line.equals("use potion"))
+				this.transition = true;
 
 			if (currentRoom.crossCommand) {
 				if (crossedRooms.size() > indexCurentRoom) {
@@ -113,27 +138,38 @@ public class Dungeon {
 				currentRoom.crossCommand = false;
 
 			}
+			
+			
+			
+			System.out.println("*****************************");
+			System.out.println("*****************************");
 		} while (!gameIsFinished());
 
-		// System.out.println("You are in " + getCurrentRoom().name);
 		if (gameIsWon()) {
 			System.out.println("You win!");
-		} else {
+		}else if (gameIsLost()) {
 			System.out.println("You loose!");
 		}
+		 
+			
 	}
 
 	public boolean gameIsFinished() {
-		return gameIsLost() || gameIsWon();
+		
+				
+		return gameIsLost() || gameIsWon() || dungeonIsChanged();
 	}
 
 	public boolean gameIsLost() {
+		return usedKeys == 0 || usedWeapons == 0;
 
-		// il reste bouton etc
-		return currentRoom.name.equals("trap");
 	}
 
 	public boolean gameIsWon() {
-		return currentRoom.name.equals("exit");
+		return currentRoom.name.equals("exit room");
+	}
+	public boolean dungeonIsChanged(){		
+			
+		return this.transition ;
 	}
 }
