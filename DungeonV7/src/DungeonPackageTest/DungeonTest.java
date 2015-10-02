@@ -54,17 +54,17 @@ public class DungeonTest {
 	// This method test if the number of treasures is decreased
 	public void dungeonSpecificCommandTreasureTest() {
 
-		dungeon1.getRandomRoom();
+		Room r= dungeon1.getRandomRoom();
 		dungeon1.dungeonSpecificCommand("treasure");
 
-		assertEquals(player.getTreasure(), 200);
+		assertEquals(player.getTreasure(), 5215);
 
 	}
 	
 	// This method test if the value of transition became true
 	public void dungeonSpecificCommandTransitionTest() {
 
-		dungeon1.getRandomRoom();
+		Room room = dungeon1.getRandomRoom();
 		dungeon1.dungeonSpecificCommand("use potion");
 
 		assertEquals(dungeon1.dungeonIsChanged(),true);
