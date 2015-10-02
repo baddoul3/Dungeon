@@ -44,7 +44,7 @@ public abstract class Dungeon {
 	 * 
 	 */
 	public Room getRandomRoom() {
-		List<Room> roomListes = new ArrayList();
+		List<Room> roomListes = new ArrayList<>();
 
 		roomListes.add(new NormalRoom("normal"));
 		roomListes.add(new MonsterRoom("monster"));
